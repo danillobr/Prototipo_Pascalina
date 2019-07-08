@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+</head>
+
+<body>
+	<section class="container basis-numero-container">
+		<div class="item basis-600-grow-1">
+			Resultado: <span id = "total"></span>
+		</div>	
+	</section>
+
+	<section class="container basis-numero-container">
+		<div class="item basis-600-grow-1">
+			<canvas id="canvas" width="1500" height="400"></canvas>
+		</div>	
+	</section>
+
+	<section class="container basis-numero-container">
+		<div class="item basis-110-grow-1"> Centena: <span id = "centena"></span> </div>
+		<div class="item basis-110-grow-1">	Dezena: <span id = "dezena"></span> </div>
+		<div class="item basis-110-grow-1">	Unidade: <span id = "unidade"></span> </div>
+	</section>
+
+	<section class="container basis-numero-container">
+		<div class="item basis-110-grow-1">
+			<button id="somarCentena"> SOMAR </button>
+			<button id="subtrairCentena"> SUBTRAIR </button>
+		</div>
+		<div class="item basis-110-grow-1">
+			<button id="somarDezena"> SOMAR </button>
+			<button id="subtrairDezena"> SUBTRAIR </button>
+		</div>
+		<div class="item basis-110-grow-1">
+			<button id="somarUnidade"> SOMAR </button>
+			<button id="subtrairUnidade"> SUBTRAIR </button>
+		</div>
+	</section>
+
+</body>
+
+<script>
+
+	var valorNaUnidade=0;
+	var valorNaDezena=0;
+	var valorNaCentena=0;
+	var valorTotal=0;
+
+	var sentidoDaEngrenagemUnidade = 0;
+	var posicaoDaEngrenagemUnidade = 0;
+	var grausDaEngrenagemUnidade = 0;
+
+	var sentidoDaEngrenagemDezena = 0;
+	var posicaoDaEngrenagemDezena = 0;
+	var grausDaEngrenagemDezena = 0;
+
+	var sentidoDaEngrenagemCentena = 0;
+	var posicaoDaEngrenagemCentena = 0;
+	var grausDaEngrenagemCentena = 0;
+	
+	var canva = document.getElementById("canvas");
+	var contexto = canvas.getContext("2d");
+	var unidade = new Image();
+	unidade.src = "./engrenagens/engrenagemUnidade.png";
+	var dezena = new Image();
+	dezena.src = "./engrenagens/engrenagemNumericaDezena.png";
+	var centena = new Image();
+	centena.src = "./engrenagens/engrenagemCentena.png";
+	var segundaEngrenagemDeCima = new Image();
+	segundaEngrenagemDeCima.src = "./engrenagens/segundaEngrenagemDeCima.png";
+	var primeiraEngrenagemDeCima = new Image();
+	primeiraEngrenagemDeCima.src = "./engrenagens/primeiraEngrenagemDeCima.png";
+
+	function total(){	
+		valorTotal = valorNaUnidade + valorNaDezena + valorNaCentena;
+		document.getElementById("total").innerHTML=valorTotal;	
+	}
+
+	function somarUnidade(){
+		if(valorTotal<999){
+			if(valorNaUnidade==9){
+				valorNaUnidade = 0;
+				loopDaEngrenagemUnidade(posicaoDaEngrenagemUnidade,-1);
+				somarDezena();
+			}else{
+				valorNaUnidade ++;
+				loopDaEngrenagemUnidade(posicaoDaEngrenagemUnidade,-1);
+			}
+			total();
+		}else{
+			//maximoAtingido();
+		}
+		document.getElementById("unidade").innerHTML=valorNaUnidade;		
+	}
+
+	function somarDezena(){
+		if(valorTotal<990){
+			if(valorNaDezena==90){
+				valorNaDezena = 0;
+				loopDaEngrenagemDezena(posicaoDaEngrenagemDezena,-1);
+				somarCentena();
+			}else{
+				valorNaDezena += 10;
+				loopDaEngrenagemDezena(posicaoDaEngrenagemDezena,-1);
+			}
+			total();
+		}else{
+			//maximoAtingido();
+		}
+		document.getElementById("dezena").innerHTML=valorNaDezena;
+	}
+
+	function somarCentena(){
+		if(valorNaCentena!=900){
+			valorNaCentena += 100;
+			loopDaEngrenagemCentena(posicaoDaEngrenagemCentena,-1);
+		}
+		total();
+		document.getElementById("centena").innerHTML=valorNaCentena;
+	}
+
+	function subtrairUnidade(){
+		if(valorNaUnidade==0){
+			valorNaUnidade = 9;
+			loopDaEngrenagemUnidade(posicaoDaEngrenagemUnidade,1);
+			subtrairDezena();
+		}else{
+			valorNaUnidade --;
+			loopDaEngrenagemUnidade(posicaoDaEngrenagemUnidade,1);
+		}
+		total();
+		document.getElementById("unidade").innerHTML=valorNaUnidade;
+	}
+
+	function subtrairDezena(){
+		if(valorTotal>=10){
+			if(valorNaDezena==0){
+				valorNaDezena = 90;
+				loopDaEngrenagemDezena(posicaoDaEngrenagemDezena,1);
+				subtrairCentena();
+			}else{
+				valorNaDezena -=10;
+				loopDaEngrenagemDezena(posicaoDaEngrenagemDezena,1);
+			}
+		}
+		total();
+		document.getElementById("dezena").innerHTML=valorNaDezena;
+	}
+
+	function subtrairCentena(){
+		if(valorTotal>=100){		
+			valorNaCentena -=100;
+			loopDaEngrenagemCentena(posicaoDaEngrenagemCentena,1);
+		}
+		total();
+		document.getElementById("centena").innerHTML=valorNaCentena;
+	}
+
+	document.getElementById("somarUnidade").addEventListener("click",()=>{
+		somarUnidade();
+	});
+	document.getElementById("subtrairUnidade").addEventListener("click",()=>{
+		subtrairUnidade();
+	})
+	document.getElementById("somarDezena").addEventListener("click",()=>{
+		somarDezena();
+	});
+	document.getElementById("subtrairDezena").addEventListener("click",()=>{
+		subtrairDezena();
+	});
+	document.getElementById("somarCentena").addEventListener("click",()=>{
+		somarCentena();
+	});
+	document.getElementById("subtrairCentena").addEventListener("click",()=>{
+		subtrairCentena();
+	});
+
+	onload=function(){
+		loopDaEngrenagemUnidade(0,posicaoDaEngrenagemUnidade);
+		loopDaEngrenagemDezena(0,sentidoDaEngrenagemDezena);
+		loopDaEngrenagemCentena(0,sentidoDaEngrenagemCentena);
+	}
+
+	function loopDaEngrenagemUnidade(i=posicaoDaEngrenagemUnidade, sentidoDaEngrenagemUnidade){
+		contexto.clearRect(0,0,1500,400);
+		drawImage(segundaEngrenagemDeCima, 538, 145, 0.15, i);
+		drawImage(primeiraEngrenagemDeCima, 338, 145, 0.15, posicaoDaEngrenagemDezena);	
+		drawImage(unidade, 638, 280, 0.15, i*-1);
+		drawImage(centena, 238, 280, 0.15, posicaoDaEngrenagemCentena*-1);
+		drawImage(dezena, 438, 280, 0.15, posicaoDaEngrenagemDezena*-1);
+		
+		setTimeout(()=>{
+			if(sentidoDaEngrenagemUnidade == -1){
+				if(grausDaEngrenagemUnidade<36){
+					grausDaEngrenagemUnidade++;
+					posicaoDaEngrenagemUnidade = i-1;
+					loopDaEngrenagemUnidade(posicaoDaEngrenagemUnidade, sentidoDaEngrenagemUnidade);
+				}else{
+					grausDaEngrenagemUnidade=0;
+					return;
+				}
+			}else if(sentidoDaEngrenagemUnidade == 1){
+				if(grausDaEngrenagemUnidade<36){	
+					grausDaEngrenagemUnidade++;
+					posicaoDaEngrenagemUnidade = i+1;
+					loopDaEngrenagemUnidade(posicaoDaEngrenagemUnidade, sentidoDaEngrenagemUnidade);
+				}else{
+					grausDaEngrenagemUnidade=0;
+						return;
+				}
+			}
+		}, 10);
+	}
+
+	function loopDaEngrenagemDezena(i=posicaoDaEngrenagemDezena, sentidoDaEngrenagemDezena){
+		contexto.clearRect(0,0,1500,400);
+		drawImage(segundaEngrenagemDeCima, 538, 145, 0.15, posicaoDaEngrenagemUnidade);
+		drawImage(primeiraEngrenagemDeCima, 338, 145, 0.15, i);	
+		drawImage(unidade, 638, 280, 0.15, posicaoDaEngrenagemUnidade*-1);
+		drawImage(centena, 238, 280, 0.15, posicaoDaEngrenagemCentena*-1);
+		drawImage(dezena, 438, 280, 0.15, i*-1);
+
+		setTimeout(()=>{
+			if(sentidoDaEngrenagemDezena == -1){
+				if(grausDaEngrenagemDezena<36){
+					grausDaEngrenagemDezena++;
+					posicaoDaEngrenagemDezena = i-1;
+					loopDaEngrenagemDezena(posicaoDaEngrenagemDezena, sentidoDaEngrenagemDezena);
+				}else{
+					grausDaEngrenagemDezena=0;
+					return;
+				}
+			}else if(sentidoDaEngrenagemDezena == 1){
+				if(grausDaEngrenagemDezena<36){	
+					grausDaEngrenagemDezena++;
+					posicaoDaEngrenagemDezena = i+1;
+					loopDaEngrenagemDezena(posicaoDaEngrenagemDezena, sentidoDaEngrenagemDezena);
+				}else{
+					grausDaEngrenagemDezena=0;
+						return;
+				}
+			}
+		}, 10);
+	}
+
+	function loopDaEngrenagemCentena(i=posicaoDaEngrenagemCentena, sentidoDaEngrenagemCentena){
+		contexto.clearRect(0,0,1500,400);
+		drawImage(segundaEngrenagemDeCima, 538, 145, 0.15, posicaoDaEngrenagemUnidade);
+		drawImage(primeiraEngrenagemDeCima, 338, 145, 0.15, posicaoDaEngrenagemDezena);	
+		drawImage(unidade, 638, 280, 0.15, posicaoDaEngrenagemUnidade*-1);
+		drawImage(centena, 238, 280, 0.15, i*-1);
+		drawImage(dezena, 438, 280, 0.15, posicaoDaEngrenagemDezena*-1);
+
+		setTimeout(()=>{
+			if(sentidoDaEngrenagemCentena == -1){
+				if(grausDaEngrenagemCentena<36){
+					grausDaEngrenagemCentena++;
+					posicaoDaEngrenagemCentena = i-1;
+					loopDaEngrenagemCentena(posicaoDaEngrenagemCentena, sentidoDaEngrenagemCentena);
+				}else{
+					grausDaEngrenagemCentena=0;
+					return;
+				}
+			}else if(sentidoDaEngrenagemCentena == 1){
+				if(grausDaEngrenagemCentena<36){	
+					grausDaEngrenagemCentena++;
+					posicaoDaEngrenagemCentena = i+1;
+					loopDaEngrenagemCentena(posicaoDaEngrenagemCentena, sentidoDaEngrenagemCentena);
+				}else{
+					grausDaEngrenagemCentena=0;
+						return;
+				}
+			}
+		}, 10);
+	}
+
+	function drawImage(image, x, y, scale, rotation){
+		contexto.save();
+		contexto.setTransform(scale, 0, 0, scale, x, y);
+		contexto.rotate(rotation*Math.PI/180);
+		contexto.drawImage(image, -image.width / 2, -image.height / 2);
+		contexto.restore();
+	}
+
+</script>
+
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+</html>
