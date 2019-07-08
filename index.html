@@ -228,6 +228,7 @@
 		drawImage(unidade, 638, 250, 0.15, posicaoDaEngrenagemUnidade*-1);
 		drawImage(centena, 238, 250, 0.15, posicaoDaEngrenagemCentena*-1);
 		drawImage(dezena, 438, 250, 0.15, i*-1);
+		drawImage(ponteiros, 438, 380, 0.15, 0);
 
 		setTimeout(()=>{
 			if(sentidoDaEngrenagemDezena == -1){
@@ -259,7 +260,8 @@
 		drawImage(unidade, 638, 250, 0.15, posicaoDaEngrenagemUnidade*-1);
 		drawImage(centena, 238, 250, 0.15, i*-1);
 		drawImage(dezena, 438, 250, 0.15, posicaoDaEngrenagemDezena*-1);
-
+		drawImage(ponteiros, 438, 380, 0.15, 0);
+		
 		setTimeout(()=>{
 			if(sentidoDaEngrenagemCentena == -1){
 				if(grausDaEngrenagemCentena<36){
