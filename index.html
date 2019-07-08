@@ -74,6 +74,8 @@
 	segundaEngrenagemDeCima.src = "./engrenagens/segundaEngrenagemDeCima.png";
 	var primeiraEngrenagemDeCima = new Image();
 	primeiraEngrenagemDeCima.src = "./engrenagens/primeiraEngrenagemDeCima.png";
+	var ponteiros = new Image();
+	ponteiros.src = "./engrenagens/ponteiros.png";
 
 	function total(){	
 		valorTotal = valorNaUnidade + valorNaDezena + valorNaCentena;
@@ -124,16 +126,18 @@
 	}
 
 	function subtrairUnidade(){
-		if(valorNaUnidade==0){
-			valorNaUnidade = 9;
-			loopDaEngrenagemUnidade(posicaoDaEngrenagemUnidade,1);
-			subtrairDezena();
-		}else{
-			valorNaUnidade --;
-			loopDaEngrenagemUnidade(posicaoDaEngrenagemUnidade,1);
+		if(valorTotal != 0){	
+			if(valorNaUnidade==0 && valorTotal != 0){
+				valorNaUnidade = 9;
+				loopDaEngrenagemUnidade(posicaoDaEngrenagemUnidade,1);
+				subtrairDezena();
+			}else{
+				valorNaUnidade --;
+				loopDaEngrenagemUnidade(posicaoDaEngrenagemUnidade,1);
+			}
+			total();
+			document.getElementById("unidade").innerHTML=valorNaUnidade;
 		}
-		total();
-		document.getElementById("unidade").innerHTML=valorNaUnidade;
 	}
 
 	function subtrairDezena(){
@@ -187,11 +191,12 @@
 
 	function loopDaEngrenagemUnidade(i=posicaoDaEngrenagemUnidade, sentidoDaEngrenagemUnidade){
 		contexto.clearRect(0,0,1500,400);
-		drawImage(segundaEngrenagemDeCima, 538, 145, 0.15, i);
-		drawImage(primeiraEngrenagemDeCima, 338, 145, 0.15, posicaoDaEngrenagemDezena);	
-		drawImage(unidade, 638, 280, 0.15, i*-1);
-		drawImage(centena, 238, 280, 0.15, posicaoDaEngrenagemCentena*-1);
-		drawImage(dezena, 438, 280, 0.15, posicaoDaEngrenagemDezena*-1);
+		drawImage(segundaEngrenagemDeCima, 538, 115, 0.15, i);
+		drawImage(primeiraEngrenagemDeCima, 338, 115, 0.15, posicaoDaEngrenagemDezena);	
+		drawImage(unidade, 638, 250, 0.15, i*-1);
+		drawImage(centena, 238, 250, 0.15, posicaoDaEngrenagemCentena*-1);
+		drawImage(dezena, 438, 250, 0.15, posicaoDaEngrenagemDezena*-1);
+		drawImage(ponteiros, 438, 380, 0.15, 0);
 		
 		setTimeout(()=>{
 			if(sentidoDaEngrenagemUnidade == -1){
@@ -218,11 +223,11 @@
 
 	function loopDaEngrenagemDezena(i=posicaoDaEngrenagemDezena, sentidoDaEngrenagemDezena){
 		contexto.clearRect(0,0,1500,400);
-		drawImage(segundaEngrenagemDeCima, 538, 145, 0.15, posicaoDaEngrenagemUnidade);
-		drawImage(primeiraEngrenagemDeCima, 338, 145, 0.15, i);	
-		drawImage(unidade, 638, 280, 0.15, posicaoDaEngrenagemUnidade*-1);
-		drawImage(centena, 238, 280, 0.15, posicaoDaEngrenagemCentena*-1);
-		drawImage(dezena, 438, 280, 0.15, i*-1);
+		drawImage(segundaEngrenagemDeCima, 538, 115, 0.15, posicaoDaEngrenagemUnidade);
+		drawImage(primeiraEngrenagemDeCima, 338, 115, 0.15, i);	
+		drawImage(unidade, 638, 250, 0.15, posicaoDaEngrenagemUnidade*-1);
+		drawImage(centena, 238, 250, 0.15, posicaoDaEngrenagemCentena*-1);
+		drawImage(dezena, 438, 250, 0.15, i*-1);
 
 		setTimeout(()=>{
 			if(sentidoDaEngrenagemDezena == -1){
@@ -249,11 +254,11 @@
 
 	function loopDaEngrenagemCentena(i=posicaoDaEngrenagemCentena, sentidoDaEngrenagemCentena){
 		contexto.clearRect(0,0,1500,400);
-		drawImage(segundaEngrenagemDeCima, 538, 145, 0.15, posicaoDaEngrenagemUnidade);
-		drawImage(primeiraEngrenagemDeCima, 338, 145, 0.15, posicaoDaEngrenagemDezena);	
-		drawImage(unidade, 638, 280, 0.15, posicaoDaEngrenagemUnidade*-1);
-		drawImage(centena, 238, 280, 0.15, i*-1);
-		drawImage(dezena, 438, 280, 0.15, posicaoDaEngrenagemDezena*-1);
+		drawImage(segundaEngrenagemDeCima, 538, 115, 0.15, posicaoDaEngrenagemUnidade);
+		drawImage(primeiraEngrenagemDeCima, 338, 115, 0.15, posicaoDaEngrenagemDezena);	
+		drawImage(unidade, 638, 250, 0.15, posicaoDaEngrenagemUnidade*-1);
+		drawImage(centena, 238, 250, 0.15, i*-1);
+		drawImage(dezena, 438, 250, 0.15, posicaoDaEngrenagemDezena*-1);
 
 		setTimeout(()=>{
 			if(sentidoDaEngrenagemCentena == -1){
